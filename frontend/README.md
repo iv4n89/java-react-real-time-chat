@@ -1,73 +1,71 @@
-# React + TypeScript + Vite
+# Chat Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Este proyecto es un **chat en tiempo real** desarrollado con **React** y **Vite**. Permite a los usuarios enviar y recibir mensajes instantáneamente, integrándose con servicios backend para la gestión de usuarios y mensajes.
 
-Currently, two official plugins are available:
+## Tecnologías utilizadas
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- [React](https://react.dev/) — Librería principal para la UI.
+- [Vite](https://vitejs.dev/) — Herramienta de desarrollo y bundler.
+- [Socket.IO](https://socket.io/) — Comunicación en tiempo real.
+- [Axios](https://axios-http.com/) — Cliente HTTP para APIs REST.
+- [React Router](https://reactrouter.com/) — Navegación entre vistas.
+- [Tailwind CSS](https://tailwindcss.com/) — Estilos utilitarios (opcional, según configuración).
 
-## React Compiler
+## Estructura de carpetas
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```
+/src
+  /components      # Componentes reutilizables (ChatBox, MessageList, UserList, etc.)
+  /pages           # Vistas principales (Home, ChatRoom, Login, etc.)
+  /services        # Lógica de conexión a APIs y sockets
+  /hooks           # Custom hooks (useChat, useAuth, etc.)
+  /utils           # Utilidades y helpers
+  /assets          # Imágenes, íconos, etc.
+  main.jsx         # Entry point de la app
+  App.jsx          # Componente raíz
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Decisiones técnicas
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+- **React + Vite**: Vite ofrece recarga rápida y configuración mínima.
+- **Socket.IO**: Permite comunicación bidireccional eficiente para mensajes en tiempo real.
+- **Separación de lógica**: Hooks personalizados para manejar autenticación y chat.
+- **Componentización**: UI dividida en componentes pequeños y reutilizables.
+- **Gestión de estado**: Uso de hooks y contexto para compartir estado global (usuarios, mensajes).
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## Flujo de datos
+
+```mermaid
+sequenceDiagram
+    participant Usuario
+    participant Frontend
+    participant Backend API
+    participant SocketServer
+
+    Usuario->>Frontend: Escribe y envía mensaje
+    Frontend->>SocketServer: Emite evento "nuevo mensaje"
+    SocketServer->>Backend API: Guarda mensaje en base de datos
+    SocketServer-->>Frontend: Emite evento "mensaje recibido"
+    Frontend-->>Usuario: Muestra mensaje en UI
+
+    Usuario->>Frontend: Se conecta / inicia sesión
+    Frontend->>Backend API: Solicita autenticación
+    Backend API-->>Frontend: Devuelve token/usuario
+    Frontend->>SocketServer: Se une al canal de chat
 ```
+
+## Cómo ejecutar
+
+```bash
+npm install
+npm run dev
+```
+
+## Personalización
+
+- Configura la URL del backend y del servidor de sockets en `/src/services/`.
+- Agrega nuevos componentes en `/src/components/` según necesidades.
+
+---
+
+¡Contribuciones y sugerencias son bienvenidas!
