@@ -16,8 +16,9 @@ public record ChatMessage(
         if (roomId == null) {
             throw new IllegalArgumentException("Room ID cannot be null");
         }
-        if (userId == null) {
-            throw new IllegalArgumentException("User ID cannot be null");
+        // userId can be null for system messages
+        if (userId == null && type == MessageType.CHAT) {
+            throw new IllegalArgumentException("User ID cannot be null for chat messages");
         }
         if (username == null || username.isBlank()) {
             throw new IllegalArgumentException("Username cannot be null or blank");

@@ -59,6 +59,12 @@ public class RoomController {
         return ResponseEntity.ok(RoomResponse.fromDomain(room));
     }
 
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<RoomResponse> getUserRoom(@PathVariable UUID userId) {
+        Room room = roomApplicationService.executeGetRoomByUserId(userId);
+        return ResponseEntity.ok(RoomResponse.fromDomain(room));
+    }
+
     @PostMapping("/assign")
     public ResponseEntity<RoomResponse> assignUserToRoom(@RequestBody AssignUserRequest request) {
         Room room = roomApplicationService.executeAssign(request.userId(), request.username());

@@ -141,4 +141,9 @@ public class RoomApplicationService
     public List<Room> findAll() {
         return roomPersistencePort.findAll();
     }
+
+    public Room executeGetRoomByUserId(UUID userId) {
+        return roomDomainService.findRoomByUserId(userId)
+            .orElseThrow(() -> new UserNotInRoomException(userId, null));
+    }
 }

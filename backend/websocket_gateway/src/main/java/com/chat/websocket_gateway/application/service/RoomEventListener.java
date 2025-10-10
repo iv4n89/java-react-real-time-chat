@@ -24,9 +24,10 @@ public class RoomEventListener {
     @KafkaListener(topics = "room.events", groupId = "websocket-gateway-group")
     public void consumeRoomEvent(String message, @Header(value = "kafka_receivedMessageKey", required = false) String eventType) {
         try {
-            System.out.println("Received room event: " + eventType);
+            System.out.println("Received room event type: " + eventType);
+            System.out.println("Received room event message: " + message);
 
-            JsonNode eventNode = objectMapper.readTree(eventType);
+            JsonNode eventNode = objectMapper.readTree(message);
 
             if (eventType == null) {
                 return;
